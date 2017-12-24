@@ -2,7 +2,7 @@
 
 usage() {
 (>&2 echo "\
-Usage: ${0##*/} [-h] [-o OUTFILE] [--] [INFILE]
+Usage: ${0##*/} [-h] [-k] [-o OUTFILE] [--] [INFILE]
 Generate a dot file from a supplied, valid GNU Makefile, INFILE.
 If INFILE is not supplied, STDIN is taken as input.
 
@@ -10,8 +10,9 @@ The output either gets written to STDOUT if '-' is supplied an OUTFILE,
 or if the -o switch is omitted. and write the result to standard output.
 With no INFILE or when INFILE is -, read standard input.
 
-	-h|-?      display this help and exit
-	-o OUTFILE write the result to OUTFILE instead of STDOUT.
+	-h|-?      Write help information to STDOUT.
+	-k         Keep intermediate files.
+	-o OUTFILE Write the result to OUTFILE instead of STDOUT.
 
 eg: All the following, does exactly the same thing.
 	# ${0##*/} /usr/src/linux/Makefile >linux_make_deps.dot
@@ -26,13 +27,16 @@ eg: Make a png of the Linux kernel's Makefile dependencies.
 
 OPTIND=1
 outfile=""
-while getopts h?vo: o; do
+keepIntermediate=0
+while getopts h?ko: o; do
 	case "$o" in
 		h|\?)
 			usage
 			exit 0
 			;;
 		o)  outfile=$OPTARG
+			;;
+		k)  keepIntermediate=1
 			;;
 		*)
 			usage >&2
@@ -51,17 +55,26 @@ else
 	infile=$1
 fi
 
+BASE_DIR=$PWD/`dirname ${0}`
+keepDotFile=1
 if [ "$outfile" = "" ]
 then
-	gnumake2dot_HOME=$PWD/`dirname ${0}`
-	gnumake2dot_HOME=$gnumake2dot_HOME \
+	keepDotFile=0
+	outfile=$$.dot
+fi
+
+BASE_DIR=$BASE_DIR \
 INFILE=`realpath $infile` \
-OUTFILE=$gnumake2dot_HOME/$$.dot \
-make -f $gnumake2dot_HOME/Makefile all && \
-cat $gnumake2dot_HOME/$$.dot && \
-gnumake2dot_HOME=$gnumake2dot_HOME \
-make -f $gnumake2dot_HOME/Makefile clean && \
-rm -f $gnumake2dot_HOME/$$.dot
-else
-	INFILE=$infile OUTFILE=$outfile make all clean
+OUTFILE=$outfile \
+make -f $BASE_DIR/Makefile all && \
+
+if [ $keepDotFile -eq 0 ]
+then
+	cat $BASE_DIR/$$.dot
+	rm -f $BASE_DIR/$$.dot
+fi
+
+if [ $keepIntermediate -eq 0 ]
+then
+	BASE_DIR=$BASE_DIR make -f $BASE_DIR/Makefile clean
 fi
