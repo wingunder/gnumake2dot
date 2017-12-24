@@ -40,7 +40,7 @@ tmp.filter4: tmp.filter3
 
 # Generate the output file.
 $(OUTFILE): tmp.filter4
-@awk -F':' -v DIR="$(basedirINFILE)" -f $(BASE_DIR)/GNUMake2dot.awk $< >$@
+	@awk -F':' -v DIR="$(basedirINFILE)" -f $(BASE_DIR)/GNUMake2dot.awk $< >$@
 
 clean:
 	@rm -f tmp.filter[01234] tmp.deps
