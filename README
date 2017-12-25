@@ -1,0 +1,87 @@
+GNUmake2dot
+===========
+
+Usage
+-----
+	gnumake2dot.sh [-h] [-k] [-o OUTFILE] [--] [INFILE]
+
+Generate a dot file from a supplied, valid GNU Makefile, INFILE.
+If INFILE is not supplied, STDIN is taken as input.
+
+The output either gets written to STDOUT if '-' is supplied an OUTFILE,
+or if the -o switch is omitted. and write the result to standard output.
+With no INFILE or when INFILE is -, read standard input.
+
+	-h|-?      Write help information to STDOUT.
+	-k         Keep intermediate files.
+	-n         Just print the commands. No execution.
+	-o OUTFILE Write the result to OUTFILE instead of STDOUT.
+
+eg: All the following, does exactly the same thing.
+	# gnumake2dot.sh /tmp/hiredis/Makefile >deps.dot
+	# gnumake2dot.sh -- /tmp/hiredis/Makefile >deps.dot
+	# gnumake2dot.sh -o deps.dot /tmp/hiredis/Makefile
+	# gnumake2dot.sh -o deps.dot -- /tmp/hiredis/Makefile
+
+eg: Generate a png of the hiredis' Makefile dependencies.
+	# gnumake2dot.sh /tmp/hiredis/Makefile | dot -Tpng -o deps.png
+
+Project Goal
+------------
+The goal of this project is to supply an easy, portable way to
+visualize GNU Make dependencies, requiring only a minimal set of
+tools as well as the minimum amount of programming.
+
+Motivation
+----------
+Many other similar tools exist, but they all depend on one or other
+form of high-level language like Python, Java, Perl, JavaScript, etc.
+
+Operation
+---------
+Visualizing Makefile dependencies is not an easy thing to do, as GNU
+Make does not supply a structured output of its meta data. The closest
+GNU Make comes to this, is by supplying the '-p' switch:
+
+	  From the make man page:
+	  -p, --print-data-base
+		Print the data base (rules and variable values) that results
+		from reading the makefiles; then execute as usual or as
+		otherwise specified. This also prints the version information
+		given by the -v switch (see below). To print the data base
+		without trying to remake any files, use make -p -f/dev/null.
+
+Make's '-p' output is usable after doing some serious filtering. This
+is where sh, grep, awk and sed comes in handy.
+
+Filtering could also be done with more powerful languages, but this
+will add another dependency to this tool. Tools like sh, make, grep,
+awk and sed are almost certainly available on any system where one
+would like to debug or visualize Makefile dependencies.  
+
+After filtering make's '-p' output, a .dot file gets written, with the
+help of the GNUMake2dot.awk script.
+
+Installation
+------------
+  1. Clone the git repository:
+	  # git clone git@github.com:wingunder/GNUMake2dot.git
+
+  2. Make sure that the required tools are installed.
+
+Required tools
+--------------
+
+	- sh
+	- make
+	- grep
+	- sed
+	- awk
+
+Optional tools
+--------------
+	- dot (from https://graphviz.gitlab.io/)
+
+The output of the gnumake2dot utility is in the .dot file format. The
+gnumake2dot.sh utility can however generate a .dot file output,
+without the availability of 'dot'.
