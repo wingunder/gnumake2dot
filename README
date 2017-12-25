@@ -1,4 +1,4 @@
-GNUmake2dot
+gnumake2dot
 ===========
 
 Usage
@@ -60,12 +60,12 @@ awk and sed are almost certainly available on any system where one
 would like to debug or visualize Makefile dependencies.  
 
 After filtering make's '-p' output, a .dot file gets written, with the
-help of the GNUMake2dot.awk script.
+help of the gnumake2dot.awk script.
 
 Installation
 ------------
   1. Clone the git repository:
-	  # git clone git@github.com:wingunder/GNUMake2dot.git
+	  # git clone git@github.com:wingunder/gnumake2dot.git
 
   2. Make sure that the required tools are installed.
 
