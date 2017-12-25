@@ -5,10 +5,20 @@ BEGIN {
 }
 
 {
-	fromFile=$1
+	fromFile=$1;
 	split($2,deps," ");
+	orderFlag=0;
 	for (i in deps) {
-		print "\"" fromFile "\" -> \"" deps[i] "\";";
+		if (deps[i] != "|") {
+			shape="";
+			if (orderFlag == 1) {
+				print "\"" deps[i] "\" [shape=box];";
+			}
+			print "\"" fromFile "\" -> \"" deps[i] "\";";
+		}
+		else {
+			orderFlag=1;
+		}
 	}
 }
 
