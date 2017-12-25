@@ -85,3 +85,36 @@ Optional tools
 The output of the gnumake2dot utility is in the .dot file format. The
 gnumake2dot.sh utility can however generate a .dot file output,
 without the availability of 'dot'.
+
+Testing
+-------
+Generate a .dot file output of the ./Makefile:
+	# ./gnumake2dot.sh ./Makefile
+
+Generate a test.png file, containing a visualization of ./Makefile:
+	# ./gnumake2dot.sh ./Makefile | dot -Tpng -o test.png
+
+TODO
+----
+	- Remove the grep dependency.
+	- Remove either the sed or awk dependency.
+	- Add generation of output formats other than '.dot', like XML,
+	  Json, etc.
+
+Copyright
+---------
+Copyright (C) 2017 Pieter du Preez <pdupreez+remove_this_and_the_preceeding_plus@gmail.com>
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
