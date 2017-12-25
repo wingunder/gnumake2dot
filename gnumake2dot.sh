@@ -21,7 +21,7 @@ eg: All the following, does exactly the same thing.
 	# ${0##*/} -o deps.dot /tmp/hiredis/Makefile
 	# ${0##*/} -o deps.dot -- /tmp/hiredis/Makefile
 
-eg: Make a png of the Linux kernel's Makefile dependencies.
+eg: Generate a png of the hiredis' Makefile dependencies.
 	# ${0##*/} /tmp/hiredis/Makefile | dot -Tpng -o deps.png
 ")
 }
