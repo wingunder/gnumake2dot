@@ -16,13 +16,13 @@ With no INFILE or when INFILE is -, read standard input.
 	-o OUTFILE Write the result to OUTFILE instead of STDOUT.
 
 eg: All the following, does exactly the same thing.
-	# ${0##*/} /usr/src/linux/Makefile >linux_make_deps.dot
-	# ${0##*/} -- /usr/src/linux/Makefile >linux_make_deps.dot
-	# ${0##*/} -o linux_make_deps.dot /usr/src/linux/Makefile
-	# ${0##*/} -o linux_make_deps.dot -- /usr/src/linux/Makefile
+	# ${0##*/} /tmp/hiredis/Makefile >deps.dot
+	# ${0##*/} -- /tmp/hiredis/Makefile >deps.dot
+	# ${0##*/} -o deps.dot /tmp/hiredis/Makefile
+	# ${0##*/} -o deps.dot -- /tmp/hiredis/Makefile
 
 eg: Make a png of the Linux kernel's Makefile dependencies.
-	# ${0##*/} /usr/src/linux/Makefile | dot -Tpng -o linux_make_deps.png
+	# ${0##*/} /tmp/hiredis/Makefile | dot -Tpng -o deps.png
 ")
 }
 
