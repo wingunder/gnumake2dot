@@ -12,6 +12,7 @@ With no INFILE or when INFILE is -, read standard input.
 
 	-h|-?      Write help information to STDOUT.
 	-k         Keep intermediate files.
+	-n         Just print the commands. No execution.
 	-o OUTFILE Write the result to OUTFILE instead of STDOUT.
 
 eg: All the following, does exactly the same thing.
@@ -28,7 +29,8 @@ eg: Make a png of the Linux kernel's Makefile dependencies.
 OPTIND=1
 outfile=""
 keepIntermediate=0
-while getopts h?ko: o; do
+switches=""
+while getopts h?kno: o; do
 	case "$o" in
 		h|\?)
 			usage
@@ -37,6 +39,8 @@ while getopts h?ko: o; do
 		o)  outfile=$OPTARG
 			;;
 		k)  keepIntermediate=1
+			;;
+		n)  switches=$switches " -n"
 			;;
 		*)
 			usage >&2
@@ -66,15 +70,17 @@ fi
 BASE_DIR=$BASE_DIR \
 INFILE=`realpath $infile` \
 OUTFILE=$outfile \
-make -f $BASE_DIR/Makefile all && \
+make $switches -f $BASE_DIR/Makefile all
 
-if [ $keepDotFile -eq 0 ]
+if [ "$noExecution" = "" ]
 then
-	cat $BASE_DIR/$$.dot
-	rm -f $BASE_DIR/$$.dot
-fi
-
-if [ $keepIntermediate -eq 0 ]
-then
-	BASE_DIR=$BASE_DIR make -f $BASE_DIR/Makefile clean
+	if [ $keepDotFile -eq 0 ]
+	then
+		cat $BASE_DIR/$$.dot
+		rm -f $BASE_DIR/$$.dot
+	fi
+	if [ $keepIntermediate -eq 0 ]
+	then
+		BASE_DIR=$BASE_DIR make -f $BASE_DIR/Makefile clean
+	fi
 fi
